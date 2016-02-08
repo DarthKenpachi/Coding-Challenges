@@ -1,0 +1,113 @@
+/**
+*	Attempted to make Employee class, to make Employee objs and get salary
+*	from setSalary()
+*
+*/
+
+public class Employee{
+
+static int numOfEmployees = 1;	//COUNT EACH TIME EMPLOYEE OBJ CREATED
+
+
+//DECLARE GLOBAL VARS
+
+String name = "alpha";
+String dob = "d/o/b";
+String salary = "non";//NOT NEEDED
+String role = "blank";
+
+double salaryDouble = 0;	//DOUBLE TO HOLD newSalary PASSED TO CONSTRUCTOR
+
+double rdSalary = 0;//ATTEMPT TO SUM SALARIES FROM RD DEPARTMENT
+double rdMaxSalary = 38500;	//MAX SALARY OF RD DEPARTMENT
+
+
+// default constructor
+Employee(){
+}
+
+Employee(double salary){
+salaryDouble = salary;	
+} //NOT NEEDED
+
+Employee(String newName, double newSalary){
+name = newName;
+salaryDouble = newSalary;
+numOfEmployees++;
+} //NOT NEEDED
+
+Employee(String newName, String newDOB, double newSalary, String newRole){
+name = newName;
+salaryDouble = newSalary;
+dob = newDOB;
+role = newRole;
+
+rdRole(salaryDouble);	//CHECK IF SALARY MATCHES FOR RD DEPARTMENT
+execRole(salaryDouble);	//CHECK IF SALARY MATCHES FOR EXEC DEPARTMENT
+opsRole(salaryDouble);	//CHECK IF SALARY MATCHES FOR OPS DEPARTMENT
+salesRole(salaryDouble);	//CHECK IF SALARY MATCHES FOR SALES DEPARTMENT
+finRole(salaryDouble);	//CHECK IF SALARY MATCHES FOR FINANCE DEPARTMENT
+
+numOfEmployees++;	//INCREMENT NUMBER OF EMPLOYEE OBJECTS CREATED
+
+}
+
+boolean rdRole(double newSalary){
+if(newSalary == 55000){
+	return true;	//RETURN TRUE IF newSalary matches salary for rd
+	}
+return false;
+}
+
+boolean execRole(double newSalary){
+if(newSalary == 10000){
+	return true;	//RETURN TRUE IF newSalary matches salary for exec
+	}
+return false;
+}
+
+boolean opsRole(double newSalary){
+if(newSalary == 30000){
+	return true;	//RETURN TRUE IF newSalary matches salary for ops
+	}
+return false;
+}
+
+boolean salesRole(double newSalary){
+if(newSalary == 45000){
+	return true;	//RETURN TRUE IF newSalary matches salary for sales
+	}
+return false;
+}
+
+boolean finRole(double newSalary){
+if(newSalary == 40000){
+	return true;	//RETURN TRUE IF newSalary matches salary for finance
+	}
+return false;
+}
+
+
+static int getNumberOfEmps(){
+	return numOfEmployees;
+}	//UNUSED METHOD:NOT NEEDED
+
+public void setSalary(double newSalary){
+salaryDouble = newSalary;
+}	//UNUSED METHOD:NOT NEEDED
+
+public void setName(String newName){
+name = newName;
+}	//UNUSED METHOD:NOT NEEDED
+	
+String getName(){
+return name;
+}	//UNUSED METHOD:NOT NEEDED
+
+double getSalary(){
+return salaryDouble;
+}	//UNUSED METHOD:NOT NEEDED
+
+
+}//end class
+
