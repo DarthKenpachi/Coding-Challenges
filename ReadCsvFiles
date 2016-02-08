@@ -1,0 +1,285 @@
+/*
+ * @author Tai Scott <taiwoscott@hotmail.com>
+*
+*@SUCCESS: PROGRAM ABLE TO CALCULATE TOTAL SALARIES OF ALL ENTRIES COMBINED
+*
+*@ERRORS:  USER MUST ENTER EXACT MAX SALARY FOR DEPARTMENT I.E. 38500, 40000, 180000, 315000, OR 200000
+*		IN ORDER TO PRINT TO SCREEN STATEMENT THAT THEY HAVE REACHED THE MAX FOR RESPECTIVE DEPARTMENT
+*@ERRORS:  UNABLE TO SORT THROUGH .CSV FILE AND CALCULATE SALARIES BASED OF DEPARTMENTS
+*
+**/
+import java.util.*;
+import java.io.File;
+import java.io.FileNotFoundException;
+
+
+public class ReadCsv2{
+	public static void main(String[] args) throws Exception{
+		//.csv == comma separated values
+
+
+double MAX_RD_SALARY = 38500;
+double MAX_EXEC_SALARY = 40000;
+double MAX_OPS_SALARY = 180000;
+double MAX_SALES_SALARY = 315000;
+double MAX_FIN_SALARY = 200000;
+
+//check command-line parameter usage
+		if(args.length != 2){
+		System.out.println("Usage: java ReadCsv sourceFile salaryLimit");
+		System.exit(0);
+		}
+
+		
+		
+		String fileName = args[0];	//store file name in String obj fileName
+
+		//String salaryLimit = args[1];
+		double salaryLimitD = Double.parseDouble(args[1]); //parse salaryLimit to double
+		
+		//create file obj from String fileName
+		File file = new File(fileName);
+		
+	//check if file exists
+
+		if(!file.exists()){
+		System.out.println("Source file " + args[0] + " does not exist");
+		System.exit(0);//end program
+		}
+
+		
+	//read from file using Scanner
+		
+
+			Scanner inputStream = new Scanner(file);	//Scanner obj to read from file
+
+			//inputStream.next();	//ignore first header line from csv
+			double totalSalary = 0;	//totalSalary type Double, var to hold total salary
+
+	
+		String name = "";	//string name to pass to Employee class constructor
+		String dob = "";	//string dob to pass to Employee class constructor
+		double salary = 0.0;	//double salary to pass to Employee class constructor
+		String role = "";	//string role to pass to Employee class constructor
+
+
+		int count = 1;//loop counter, tells how many items are in .csv file
+
+			Employee employee1 = new Employee();
+			
+
+
+			while(inputStream.hasNext()){
+				String data = inputStream.next();	//gets a whole line
+
+			//System.out.println(data);//print full csv file
+
+			String[] values = data.split(",");	//split the data string into array of string; split returns String[]
+
+			
+			
+			addValuesToList(values);	//method to add values array to list, method prints list
+
+			name = values[0];//store name to pass to Employee class to create employee obj
+
+			dob = values[1];//store dob to pass to Employee class to create employee obj
+			
+			salary = Double.parseDouble(values[2]);	//parse 3rd column of array, convert from String to double
+		
+			
+			role = values[3];//store role to pass to Employee class to create employee obj
+
+			
+			
+
+			//create employee objects
+			createEmployeeObjects(name, dob, salary, role);	//pass to create employee obj
+			
+			
+			
+			totalSalary += salary;	//update totalSalary by adding each value referenced by values[2]
+
+			//System.out.println(name);	//check to make sure name was taken from values[0]
+
+			//System.out.println("The salaries are: " + employee1.getSalary());	//print salary of employee
+
+			//System.out.println(salary);//print double salary to screen	
+
+		count++;	//increment count of files in .csv file
+			}//end while
+
+			inputStream.close();	//close File inputStream
+
+			//employee1.setSalary(salary);	//create Employee object with salary param passed to constructor
+
+
+			
+
+			System.out.println("There are: "+ count + " entries in the .csv file.");	//print to screen how many files in .csv file
+	
+			System.out.println("\nTotal Salary is: $" + totalSalary);	//print to screen total salary of all entries
+
+//check to see if salaryLimit is limit per cap of department
+//does not compare if salaryLimitD is close to max salary of department; //FIX THIS
+
+if(salaryLimitD == MAX_RD_SALARY) {
+	System.out.println("You have reached the salary limit of: " + salaryLimitD + " for the RD Department!");
+	}else if(salaryLimitD == MAX_EXEC_SALARY){
+	System.out.println("You have reached the salary limit of: " + salaryLimitD + " for the Executive Department!");
+	}else if(salaryLimitD == MAX_OPS_SALARY){
+	System.out.println("You have reached the salary limit of: " + salaryLimitD + " for the Operations Department!");
+	}else if(salaryLimitD == MAX_SALES_SALARY){
+	System.out.println("You have reached the salary limit of: " + salaryLimitD + " for the Sales Department!");
+	} else if(salaryLimitD == MAX_FIN_SALARY){
+	System.out.println("You have reached the salary limit of: " + salaryLimitD + " for the Finance Department!");
+	} else {
+	System.out.println("Please enter the max value for the department.");
+	}
+
+			//System.out.println("\nEmployee salary is: $" + employee1.salaryDouble);
+
+			double rdEmpSalary = 0.0;
+
+	
+	}//end main
+
+//create employee object from class Employee
+public static void createEmployeeObjects(String n, String d, double s, String r){
+
+	
+	
+
+	Employee emp = new Employee(n, d, s, r);	//call to Employee constructor
+
+	
+
+	System.out.println("The number of objects created was: " + emp.numOfEmployees);	//how many emp objects were created
+
+	//System.out.println("The emps name: " + n);	//check to make sure name, dob, salary, and role were passed and emp obj created properly
+	//System.out.println("The emps dob: " + d);
+	//System.out.println("The emps salary: " + s);
+	//System.out.println("The emps role: " + r);
+
+	System.out.println("The employee belongs to the RD department: " + emp.rdRole(s));	
+	System.out.println("The employee belongs to the Executive department: " + emp.execRole(s));
+	System.out.println("The employee belongs to the Operations department: " + emp.opsRole(s));
+	System.out.println("The employee belongs to the Sales department: " + emp.salesRole(s));
+	System.out.println("The employee belongs to the Finance department: " + emp.finRole(s));
+
+	/**
+	//ATTEMPT TO GET SALARY OF INDIVIDUAL EMPLOYEE OBJ, DOES NOT WORK B/C createEmployeeObjects being called from while loop
+	if(emp.rdRole(s)){
+		
+	System.out.println(calculateRdSalary(s));
+	}
+	**/
+	
+	
+
+	System.out.println();
+
+	
+
+	//createEmpList();
+
+}
+
+//method to calculate total salary per class, DOES NOT WORK/DOES NOT UPDATE PROPERLY
+public static double calculateRdSalary(double rdSal){
+
+	
+	double rdEmpSalary = 0;
+	
+	for(double i = 0; i <= 5; i++){
+	rdEmpSalary += rdSal;
+	}
+
+	return rdEmpSalary;	
+}
+
+
+/**
+public static void createEmpList(Object emp){
+	List<Object> list = new ArrayList<Object>();//declare list1 of type Object
+
+	for(Object e : emp)
+		list.add(e);
+}
+**/
+
+
+//method works to create a list and a set of Strings from values[]
+//ABLE TO PRINT LIST AND PRINT SET, UNABLE TO SEARCH THROUGH LIST OR SET TO FIND SALARY INDEX | WANTED TO CREATE LIST, GET SALARY OF EACH DEPARTMENT RESPECTIVELY, ADD SALARIES TO A VAR OF //TOTAL DEPARTMENT SALARIES
+public static void addValuesToList(String[] v){
+
+			List<String> list1 = new ArrayList<String>();//declare list1 of type String
+	
+			Set<String> set = new LinkedHashSet<String>();//declare hash set
+			
+
+			//String[] of depNames, cast into list
+			String[] depNames = {"RD", "Exec", "Ops", "Sales", "Finance"}; //ATTEMPTED TO SORT LIST OF STRINGS AND ORGANIZE BY DEPARTMENT ROLE
+	
+			//list of depNames, store String[] depNames into list
+			List<String> list2 = new ArrayList<String>();
+
+			for(String z : v)
+				set.add(z);//loop to add list1 to set
+
+			//for(String a : v)
+				//set.getLast(a);
+
+
+			for(String y : depNames)
+				list2.add(y);//loop through String[] depNames add depNames
+			
+			//add values from String[] v to list1
+			for(String x: v)
+				list1.add(x);
+
+			
+
+
+			//System.out.println(set);	//print set
+
+			System.out.println(list1);
+
+			//PRINT OUT LIST2 TO SEE VALUES
+			/**
+			*for(int i = 0; i < list2.size(); i++){
+			*System.out.printf("%s ", list2.get(i));
+			*}	//for loop prints list on each line
+			**/
+
+			System.out.println("");	//PRINT NEW LINE
+
+
+			//PRINT LIST ONE TO SEE VALUES
+			/**for(int i = 0; i < list1.size(); i++){
+			*System.out.printf("%s\n", list1.get(i));
+			*}	//for loop prints list on each line
+			**/
+
+			//USED ITERATOR TO LOOP THROUGH LIST1, ABLE TO REMOVE DEPARTMENT ROLES, NOT ABLE TO SORT ENTIRE LIST BASED OFF ROLE
+			//Iterator<String> it = list1.iterator();	//iterator obj to loop through list
+			/**
+			*while(it.hasNext()){
+			*if(list2.contains(it.next()))
+			*	it.remove();
+			*}
+			**/
+
+			//SEE WHAT LIST1 HOLDS AFTER REMOVING DEPARTMENT ROLES
+			/**
+			*for(int i = 0; i < list1.size(); i++){
+			*System.out.printf("%s\n", list1.get(i));
+			*}	//for loop prints list on each line
+			**/
+		}//end method
+
+
+}//end class
+			
+
+
+
